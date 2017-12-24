@@ -2,7 +2,7 @@
 
 ## 実行
 
-Swarmingには、予めMysqlを起動。(以下MacOS)
+Swarmingには、予めMysqlを起動。(以下MacOS)
 ```sh
 mysql.server start
 ```
