@@ -143,7 +143,7 @@ class NuPICPlotOutput(NuPICOutput):
     self.predicted_line.set_ydata(self.predicted_history)  # update the data
     if self.show_anomaly_score:
       self.anomaly_score_line.set_ydata(self.anomaly_score)  # update the data
-    plt.pause(0.01)
+    plt.pause(0.001)
     # plt.draw()
     # plt.tight_layout()
 
