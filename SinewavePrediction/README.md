@@ -9,6 +9,10 @@ mysql.server start
 
 Nupicを実行。
 ```sh
+
+# Sineウェーブデータをファイルに出力
+python generate_data.py
+
 # Modelパラメータ生成
 python swarm.py
 
