@@ -1,0 +1,12 @@
+
+!.gitkeep
+.DS_Store
+.DS_Store?
+.vscode
+
+*.pyc
+
+*.pkl
+*Report*.csv
+
+
