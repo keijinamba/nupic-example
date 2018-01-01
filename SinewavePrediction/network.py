@@ -38,6 +38,7 @@ def createResetLink(network, sensorRegionName, regionName):
   '''
   Create a reset link from a sensor region: sensorRegionName -> regionName
   '''
+  
   network.link(sensorRegionName, regionName, "UniformLink", "",
                srcOutput="resetOut", destInput="resetIn")
 
@@ -46,6 +47,7 @@ def createSensorToClassifierLinks(network, sensorRegionName, classifierRegionNam
   '''
   Create required links from a sensor region to a classifier region.
   '''
+
   network.link(sensorRegionName, classifierRegionName, "UniformLink", "",
                srcOutput="bucketIdxOut", destInput="bucketIdxIn")
   network.link(sensorRegionName, classifierRegionName, "UniformLink", "",
@@ -55,14 +57,20 @@ def createSensorToClassifierLinks(network, sensorRegionName, classifierRegionNam
 
 
 def createEncoder(encoderParams):
-  """Create a multi-encoder from params."""
+  '''
+  Create a multi-encoder from params.
+  '''
+
   encoder = MultiEncoder()
   encoder.addMultipleEncoders(encoderParams)
   return encoder
 
 
 def createNetwork(dataSource):
-  """Create and initialize a network."""
+  '''
+  Create and initialize a network.
+  '''
+
   with open(_PARAMS_PATH, "r") as f:
     modelParams = yaml.safe_load(f)["modelParams"]
 
@@ -106,7 +114,10 @@ def createNetwork(dataSource):
 
 
 def getPredictionResults(network, clRegionName):
-  """Get prediction results for all prediction steps."""
+  '''
+  Get prediction results for all prediction steps.
+  '''
+
   classifierRegion = network.regions[clRegionName]
   actualValues = classifierRegion.getOutputData("actualValues")
   probabilities = classifierRegion.getOutputData("probabilities")
@@ -125,7 +136,9 @@ def getPredictionResults(network, clRegionName):
 
 
 def run(numRecords):
-  """Run the Hot Gym example."""
+  '''
+  Run the Hot Gym example.
+  '''
 
   # Create a data source for the network.
   dataSource = FileRecordStream(streamID=_INPUT_FILE_PATH)
