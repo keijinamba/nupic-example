@@ -45,11 +45,6 @@ class NuPICOutput(object):
 
 
   @abstractmethod
-  def write(self, index, value, prediction_result, prediction_step=1):
-    pass
-
-
-  @abstractmethod
   def close(self):
     pass
 
@@ -125,27 +120,19 @@ class NuPICPlotOutput(NuPICOutput):
 
 
 
-  def write(self, index, value, prediction_result, prediction_step=1):
-    shifted_result = self.shifter.shift(prediction_result)
-    # shifted_result = prediction_result
-    # Update the trailing predicted and actual value deques.
-    inference = shifted_result.inferences\
-      ['multiStepBestPredictions'][prediction_step]
+  def write(self, value, inference, anomaly_score):
     if inference is not None:
-      self.actual_history.append(shifted_result.rawInput['sine'])
+      self.actual_history.append(value)
       self.predicted_history.append(inference)
-      if self.show_anomaly_score:
-        anomaly_score = prediction_result.inferences['anomalyScore']
+      if anomaly_score is not None and self.show_anomaly_score:
         self.anomaly_score.append(anomaly_score)
 
-    # Redraw the chart with the new data.
-    self.actual_line.set_ydata(self.actual_history)  # update the data
-    self.predicted_line.set_ydata(self.predicted_history)  # update the data
+    self.actual_line.set_ydata(self.actual_history)
+    self.predicted_line.set_ydata(self.predicted_history)
     if self.show_anomaly_score:
-      self.anomaly_score_line.set_ydata(self.anomaly_score)  # update the data
+      self.anomaly_score_line.set_ydata(self.anomaly_score)
+    
     plt.pause(0.001)
-    # plt.draw()
-    # plt.tight_layout()
 
 
 

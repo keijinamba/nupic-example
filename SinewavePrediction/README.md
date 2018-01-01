@@ -1,21 +1,29 @@
 # Sineウェーブ予測
 
-## 実行
+## 前準備
 
 Swarmingには、予めMysqlを起動。(以下MacOS)
 ```sh
 mysql.server start
 ```
 
-Nupicを実行。
+Sineウェーブデータをファイルに出力
 ```sh
-
-# Sineウェーブデータをファイルに出力
 python generate_data.py
+```
 
-# Modelパラメータ生成
+## 実行
+
+１）Swarming + Modelで予測
+```sh
+# Swarmingを実行してModelパラメータを生成
 python swarm.py
 
-# Swarming実行
+# Model実行
 python run.py
+```
+
+２）NetworkAPIで予測
+```sh
+python network.py
 ```

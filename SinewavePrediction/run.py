@@ -55,7 +55,10 @@ def runModel(model, file_name):
 
     result = shifter.shift(result)
 
-    output.write(angle, sine, result)
+    inference     = result.inferences['multiStepBestPredictions'][1]
+    anomaly_score = result.inferences['anomalyScore']
+
+    output.write(sine, inference, anomaly_score)
 
   input_file.close()
   output.close()
