@@ -28,7 +28,7 @@ def createModel():
 
 def runModel(model, file_name):
   '''
-  Run predictions by a given model.
+  Run predictions with a given model.
 
   Args:
     model: Opf model.
