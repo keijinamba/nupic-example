@@ -7,11 +7,14 @@ from nupic.engine import Network
 from nupic.encoders import MultiEncoder
 from nupic.data.file_record_stream import FileRecordStream
 
-import nupic_output
+from graph import Graph 
 
-_NUM_RECORDS = 1000
+_NUM_RECORDS = 10000
+_RUN_INTERVAL = 1
+_RUN_EPOCH = 1
+_PRINT_INTERVAL = 10
 _EXAMPLE_DIR = os.path.dirname(os.path.abspath(__file__))
-_INPUT_FILE_PATH = "sine.data.csv"
+_INPUT_FILE_PATH = "chart.data.csv"
 _PARAMS_PATH = "params.yml"
 
 
@@ -145,10 +148,10 @@ def run(numRecords):
   numRecords = min(numRecords, dataSource.getDataRowCount())
   network = createNetwork(dataSource)
 
-  network.regions["sensor"].getSelf().predictedField = "sine"
+  network.regions["sensor"].getSelf().predictedField = "price"
 
   # Set predicted field
-  network.regions["sensor"].setParameter("predictedField", "sine")
+  network.regions["sensor"].setParameter("predictedField", "price")
 
   # Enable learning for all regions.
   network.regions["SP"].setParameter("learningMode", 1)
@@ -161,27 +164,38 @@ def run(numRecords):
   network.regions["classifier"].setParameter("inferenceMode", 1)
 
   results = []
-  N = 1  # Run the network, N iterations at a time.
-  output = nupic_output.NuPICPlotOutput("Sine", show_anomaly_score=True)
+  N = _RUN_EPOCH  # Run the network, N iterations at a time.
+  graph = Graph({
+    'title': 'Bitcoin Prediction',
+    'y_label': 'price',
+    'y_lim': 'auto',
+    'prediction_num': 2,
+    'line_labels': ['1-step', '5-step']
+  })
   for iteration in range(0, numRecords, N):
-    network.run(N)
+    if iteration % _RUN_INTERVAL == 0:
+      network.run(N)
 
-    sine = network.regions["sensor"].getOutputData("sourceOut")[0]
+      price = network.regions["sensor"].getOutputData("sourceOut")[0]
 
-    predictionResults = getPredictionResults(network, "classifier")
-    oneStep = predictionResults[1]["predictedValue"]
-    oneStepConfidence = predictionResults[1]["predictionConfidence"]
-    fiveStep = predictionResults[10]["predictedValue"]
-    fiveStepConfidence = predictionResults[10]["predictionConfidence"]
+      predictionResults = getPredictionResults(network, "classifier")
+      oneStep = predictionResults[1]["predictedValue"]
+      oneStepConfidence = predictionResults[1]["predictionConfidence"]
+      fiveStep = predictionResults[5]["predictedValue"]
+      fiveStepConfidence = predictionResults[5]["predictionConfidence"]
 
-    result = (oneStep, oneStepConfidence * 100,
-              fiveStep, fiveStepConfidence * 100)
-    print "1-step: {:16} ({:4.4}%)\t 10-step: {:16} ({:4.4}%)".format(*result)
-    results.append(result)
+      result = (oneStep, oneStepConfidence * 100,
+                fiveStep, fiveStepConfidence * 100)
+      
+      if iteration % _PRINT_INTERVAL == 0:
+        print "iteration: {}".format(iteration)
+        print "1-step: {:16} ({:4.4}%)\t 5-step: {:16} ({:4.4}%)".format(*result)
+      
+      results.append(result)
 
-    output.write(sine, oneStep, 0)
+      graph.write(price, [oneStep, fiveStep])
   
-  output.close()
+  graph.close()
 
   return results
 

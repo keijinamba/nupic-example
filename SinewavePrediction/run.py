@@ -67,4 +67,4 @@ def runModel(model, file_name):
 
 if __name__ == "__main__":
   model = createModel()
-  runModel(model=model, file_name="sine.csv")
+  runModel(model=model, file_name="sine.data.csv")
