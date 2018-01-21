@@ -1,29 +1,29 @@
-# Sineウェーブ予測
+# Sine wave prediction
 
-## 前準備
+## Preprocess
 
-Swarmingには、予めMysqlを起動。(以下MacOS)
+Install Mysql for swarming.(OS: MacOS)
 ```sh
 mysql.server start
 ```
 
-Sineウェーブデータをファイルに出力
+Generate sine wave data.
 ```sh
 python generate_data.py
 ```
 
-## 実行
+## Run
 
-１）Swarming + Modelで予測
+１）Swarming + Model
 ```sh
-# Swarmingを実行してModelパラメータを生成
+# Run the swarming to get good parameters.
 python swarm.py
 
-# Model実行
+# Run the model.
 python run.py
 ```
 
-２）NetworkAPIで予測
+２）NetworkAPI
 ```sh
 python network.py
 ```

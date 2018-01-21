@@ -1,0 +1,66 @@
+model: HTMPrediction
+version: 1
+aggregationInfo:
+  fields:
+  - [date, price]
+predictAheadTime: null
+modelParams:
+  inferenceType: TemporalAnomaly
+  sensorParams:
+    verbosity: 0
+    encoders:
+      date:
+        fieldname: date
+        type: MultiEncoder
+      price:
+        clipInput: true
+        fieldname: price
+        name: price
+        w: 21
+        n: 240
+        maxval: 20000.0
+        minval: 0.0
+        type: ScalarEncoder
+    sensorAutoReset: null
+  spEnable: true
+  spParams:
+    inputWidth: 946
+    columnCount: 2048
+    spVerbosity: 0
+    spatialImp: cpp
+    globalInhibition: 1
+    localAreaDensity: -1.0
+    numActiveColumnsPerInhArea: 40
+    seed: 1956
+    potentialPct: 0.85
+    synPermConnected: 0.1
+    synPermActiveInc: 0.04
+    synPermInactiveDec: 0.005
+  tmEnable: true
+  tmParams:
+    verbosity: 0
+    columnCount: 3072
+    cellsPerColumn: 32
+    inputWidth: 2048
+    seed: 1960
+    temporalImp: cpp
+    newSynapseCount: 20
+    initialPerm: 0.21
+    permanenceInc: 0.1
+    permanenceDec: 0.1
+    maxAge: 0
+    globalDecay: 0.0
+    maxSynapsesPerSegment: 32
+    maxSegmentsPerCell: 128
+    minThreshold: 12
+    activationThreshold: 16
+    outputType: normal
+    pamLength: 3
+  clParams:
+    verbosity: 0
+    regionName: SDRClassifierRegion
+    alpha: 0.01
+    steps: '1,5'
+    maxCategoryCount: 1000
+    implementation: cpp
+  trainSPNetOnlyIfRequested: false
